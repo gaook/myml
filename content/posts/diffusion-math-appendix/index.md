@@ -3,6 +3,7 @@ title: "扩散模型的数学幕后 —— 附录 A / B / C 精读笔记"
 date: 2026-07-04
 draft: false
 math: true
+anim: true
 tags: ["扩散模型", "SDE", "Fokker-Planck", "数学", "论文精读"]
 summary: "基于《The Principles of Diffusion Models》附录 A/B/C 的中文精读：微分方程速成、密度演化（连续性方程与 Fokker–Planck）、Itô 公式与 Girsanov 定理。"
 ---
@@ -42,7 +43,11 @@ $$\frac{d\mathbf{x}(t)}{dt} = \mathbf{v}(\mathbf{x}(t),\, t) \tag{A.1.1}$$
 - 解 \(\mathbf{x}(t)\) 是一条曲线,每一瞬间的切线都与当地向量对齐。
 - **一句话:解 ODE = 把一颗粒子放进流场,看它随时间去哪。**
 
-![向量场与轨迹:同一流场上的多条轨迹(极限环)](images/01-anim.png)
+<figure style="margin:1.2rem 0;">
+<anim-ode-field style="display:block;width:100%;max-width:720px;margin:0 auto;height:500px;"></anim-ode-field>
+<noscript><img src="images/01-anim.png" alt="向量场与轨迹:同一流场上的多条轨迹(极限环)"></noscript>
+<figcaption style="text-align:center;color:var(--secondary,#8B95A8);font-size:.9em;margin-top:.4rem;">向量场与轨迹:同一流场上的多条轨迹(极限环)</figcaption>
+</figure>
 
 不指定初值时,无穷多条轨迹与向量场相容;固定 \(\mathbf{x}(0)\) 后,路径唯一。
 
@@ -108,7 +113,11 @@ $$\mathbf{x}(t) = \underbrace{E(s\!\rightsquigarrow\! t)\,\mathbf{x}(s)}_{\text{
 | Heun(二阶,预测–校正) | \(\mathbf{x}_{n+1} = \mathbf{x}_n + \tfrac{h}{2}(\mathbf{v}(\mathbf{x}_n,t_n) + \mathbf{v}(\mathbf{x}_{\text{pred}},t_n\!+\!h))\) | \(O(h^2)\) |
 | RK4(四阶) | \(\mathbf{x}_{n+1} = \mathbf{x}_n + \tfrac{h}{6}(k_1+2k_2+2k_3+k_4)\) | \(O(h^4)\) |
 
-![Euler vs Heun:同一步长下 Euler 偏离,Heun 紧贴精确解](images/03-anim.png)
+<figure style="margin:1.2rem 0;">
+<anim-euler style="display:block;width:100%;max-width:720px;margin:0 auto;height:420px;"></anim-euler>
+<noscript><img src="images/03-anim.png" alt="Euler vs Heun:同一步长下 Euler 偏离,Heun 紧贴精确解"></noscript>
+<figcaption style="text-align:center;color:var(--secondary,#8B95A8);font-size:.9em;margin-top:.4rem;">Euler vs Heun:同一步长下 Euler 偏离,Heun 紧贴精确解</figcaption>
+</figure>
 
 > Karras et al. (2022) 在扩散模型中主推 Heun;Adams 多步法思想进入 DEIS / DPM-Solver++。
 
@@ -135,7 +144,11 @@ $$d\mathbf{x}(t) = \mathbf{f}(\mathbf{x}(t),t)\,dt + g(t)\,d\mathbf{w}(t) \tag{A
 3. 高斯增量:\(\mathbf{w}(t)-\mathbf{w}(s)\sim\mathcal{N}(\mathbf{0},(t-s)\mathbf{I})\)(A.2.4);
 4. **连续但处处不可微** —— 全部麻烦的来源:普通微积分失效 ⇒ 需要 Itô 微积分(附录 C)。
 
-![布朗运动样本路径与 ±2√t 包络](images/02-anim.png)
+<figure style="margin:1.2rem 0;">
+<anim-brownian style="display:block;width:100%;max-width:720px;margin:0 auto;height:420px;"></anim-brownian>
+<noscript><img src="images/02-anim.png" alt="布朗运动样本路径与 ±2√t 包络"></noscript>
+<figcaption style="text-align:center;color:var(--secondary,#8B95A8);font-size:.9em;margin-top:.4rem;">布朗运动样本路径与 ±2√t 包络</figcaption>
+</figure>
 
 **dw 记号**:\(d\mathbf{w}(t) := \mathbf{w}(t+dt)-\mathbf{w}(t) \sim \mathcal{N}(\mathbf{0}, dt\,\mathbf{I})\)。
 它是形式记号,不是经典微分(\(d\mathbf{w}/dt\) 不存在);严格含义须回到积分形式。记忆钩子:\(d\mathbf{w} = O(\sqrt{dt})\)。
@@ -212,7 +225,11 @@ $$\log p_L(\mathbf{x}_L) = \log p_0(\mathbf{x}_0) - \sum_{k=1}^{L}\log\Big|\det\
 
 $$\frac{\partial p_t}{\partial t} + \nabla\cdot\big(p_t\,\mathbf{f}\big) = 0 \tag{B.1.4}$$
 
-![确定性流搬运密度:双峰 → 高斯](images/04-anim.png)
+<figure style="margin:1.2rem 0;">
+<anim-density mode="ode" style="display:block;width:100%;max-width:720px;margin:0 auto;height:440px;"></anim-density>
+<noscript><img src="images/04-anim.png" alt="确定性流搬运密度:双峰 → 高斯"></noscript>
+<figcaption style="text-align:center;color:var(--secondary,#8B95A8);font-size:.9em;margin-top:.4rem;">确定性流搬运密度:双峰 → 高斯</figcaption>
+</figure>
 
 **推导(六步,全是本科微积分)**:
 1. Euler 离散是小双射,\(\partial\Psi/\partial\mathbf{x} = \mathbf{I} + \Delta t\nabla\mathbf{f} + O(\Delta t^2)\);
@@ -237,7 +254,11 @@ $$\frac{\partial p_t}{\partial t} = -\nabla\cdot(\mathbf{f}\,p_t) + \frac{1}{2}g
 
 - 第一项:漂移的**搬运**;第二项:噪声的**扩散**(\(\Delta\) 为 Laplacian)。
 
-![漂移+噪声:密度既被搬运又被抹平](images/05-anim.png)
+<figure style="margin:1.2rem 0;">
+<anim-density mode="sde" style="display:block;width:100%;max-width:720px;margin:0 auto;height:440px;"></anim-density>
+<noscript><img src="images/05-anim.png" alt="漂移+噪声:密度既被搬运又被抹平"></noscript>
+<figcaption style="text-align:center;color:var(--secondary,#8B95A8);font-size:.9em;margin-top:.4rem;">漂移+噪声:密度既被搬运又被抹平</figcaption>
+</figure>
 
 **等价改写(score 现身!)**:
 
@@ -251,7 +272,11 @@ $$\partial_t p_t = -\nabla\cdot\Big(\big(\mathbf{f} - \tfrac{1}{2}g^2(t)\nabla_\
 
 $$\frac{\partial p}{\partial t} + \nabla\cdot\mathbf{j} = 0,\qquad \mathbf{j} = p\,\mathbf{v}$$
 
-![控制体积:进出通量决定盒内粒子数涨落](images/06-anim.png)
+<figure style="margin:1.2rem 0;">
+<anim-flux style="display:block;width:100%;max-width:720px;margin:0 auto;height:440px;"></anim-flux>
+<noscript><img src="images/06-anim.png" alt="控制体积:进出通量决定盒内粒子数涨落"></noscript>
+<figcaption style="text-align:center;color:var(--secondary,#8B95A8);font-size:.9em;margin-top:.4rem;">控制体积:进出通量决定盒内粒子数涨落</figcaption>
+</figure>
 
 **坐标无关推导**:任意控制体积 V 上 \(\frac{\partial}{\partial t}\int_V p + \int_{\partial V} p\mathbf{v}\cdot\mathbf{n}\,dS = 0\),散度定理化面积分为体积分,V 任意 ⇒ 逐点成立。∎
 
@@ -305,7 +330,11 @@ $$d\mathbf{w}_t = O(\sqrt{dt}),\qquad (d\mathbf{w}_t)^2 = dt$$
 - 但布朗运动:\(\mathbb{E}[x_t^2] = \sigma^2 t\) 线性增长!
 - Itô 公式补上:\(d(x_t^2) = 2x_t\sigma\,dw_t + \sigma^2\,dt\) ✓
 
-![240 条路径的 E[x²] 贴着 σ²t 直线增长](images/07-anim.png)
+<figure style="margin:1.2rem 0;">
+<anim-ito style="display:block;width:100%;max-width:720px;margin:0 auto;height:420px;"></anim-ito>
+<noscript><img src="images/07-anim.png" alt="240 条路径的 E[x²] 贴着 σ²t 直线增长"></noscript>
+<figcaption style="text-align:center;color:var(--secondary,#8B95A8);font-size:.9em;margin-top:.4rem;">240 条路径的 E[x²] 贴着 σ²t 直线增长</figcaption>
+</figure>
 
 ## C.1.2 随机 Taylor 展开:逐项清点
 
@@ -377,7 +406,11 @@ $$\frac{d\mathbf{m}}{dt} = f(t)\mathbf{m},\qquad \frac{d\mathbf{P}}{dt} = 2f(t)\
 
 想象两台"机器人画家":漂移不同、用同一支随机画笔 \(g\,d\mathbf{w}\)。Girsanov 精确回答:**改漂移(随机性不变)时,同一条路径的概率如何变** —— 路径空间的换元公式(Radon–Nikodym 导数)。
 
-![同一路径上两种漂移假设与相对似然](images/08-anim.png)
+<figure style="margin:1.2rem 0;">
+<anim-girsanov style="display:block;width:100%;max-width:720px;margin:0 auto;height:440px;"></anim-girsanov>
+<noscript><img src="images/08-anim.png" alt="同一路径上两种漂移假设与相对似然"></noscript>
+<figcaption style="text-align:center;color:var(--secondary,#8B95A8);font-size:.9em;margin-top:.4rem;">同一路径上两种漂移假设与相对似然</figcaption>
+</figure>
 
 **似然比公式**(\(\boldsymbol{\delta}_t := \mathbf{f}-\tilde{\mathbf{f}}\)):
 

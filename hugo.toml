@@ -1,5 +1,5 @@
-# 部署到 Cloudflare Pages 后，把这里换成实际域名（如 myml.pages.dev 或你的自定义域名）
-baseURL = "https://myml.pages.dev/"
+# 线上正式域名（Cloudflare Workers 稳定地址；以后接自定义域名再改这里）
+baseURL = "https://myml.gaook.workers.dev/"
 languageCode = "zh-cn"
 title = "我的深度学习笔记"
 theme = "PaperMod"

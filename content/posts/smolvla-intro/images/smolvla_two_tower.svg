@@ -1,0 +1,77 @@
+<svg width="100%" viewBox="0 0 680 446" role="img" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif">
+<title>SmolVLA two-tower: wiring versus timing</title>
+<desc>The action expert's layer i cross-attends to the VLM's layer i keys and values, so the towers must have equal depth. But in time, the VLM runs once to fill a KV cache, then the action expert reads that cache and denoises N times — the VLM is not re-run per step.</desc>
+<style>
+  .t  { font-size: 14px; fill: #20303a; }
+  .ts { font-size: 12px; fill: #5a6b75; }
+  .th { font-size: 14px; font-weight: 500; fill: #20303a; }
+  .arr { stroke: #8a98a2; stroke-width: 1.5; fill: none; marker-end: url(#ah); }
+  .c-blue   rect { fill: #E6F1FB; stroke: #1A6FC4; stroke-width: 1.3; }
+  .c-purple rect { fill: #EFE7F8; stroke: #7C4DCC; stroke-width: 1.3; }
+</style>
+<defs>
+  <marker id="ah" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto">
+    <path d="M0,0 L6,3 L0,6" fill="none" stroke="#8a98a2" stroke-width="1.2"/>
+  </marker>
+</defs>
+
+<!-- column headers with phase tags -->
+<text class="th" x="190" y="40" text-anchor="middle">&#9312; VLM tower &#8212; runs once</text>
+<text class="th" x="475" y="40" text-anchor="middle">&#9313; action expert &#8212; repeats &#215; N</text>
+
+<!-- inputs -->
+<g class="c-blue"><rect x="70" y="54" width="240" height="44" rx="8"/></g>
+<text class="th" x="190" y="77" text-anchor="middle">prefix &#183; 177 tokens</text>
+<text class="ts" x="190" y="93" text-anchor="middle">128 img &#183; 48 lang &#183; 1 state</text>
+<g class="c-purple"><rect x="400" y="54" width="150" height="44" rx="8"/></g>
+<text class="th" x="475" y="77" text-anchor="middle">from noise</text>
+<text class="ts" x="475" y="93" text-anchor="middle">50 action tokens</text>
+
+<line class="arr" x1="190" y1="98" x2="190" y2="112"/>
+<line class="arr" x1="475" y1="98" x2="475" y2="112"/>
+
+<!-- layer 1 -->
+<g class="c-blue"><rect x="70" y="114" width="240" height="42" rx="8"/></g>
+<text class="th" x="190" y="140" text-anchor="middle">VLM layer 1  &#8594;  K, V</text>
+<g class="c-purple"><rect x="400" y="114" width="150" height="42" rx="8"/></g>
+<text class="th" x="475" y="140" text-anchor="middle">expert layer 1</text>
+<text class="ts" x="355" y="129" text-anchor="middle">K,V</text>
+<line class="arr" x1="312" y1="135" x2="398" y2="135"/>
+
+<line class="arr" x1="190" y1="156" x2="190" y2="170"/>
+<line class="arr" x1="475" y1="156" x2="475" y2="170"/>
+
+<!-- layer 2 -->
+<g class="c-blue"><rect x="70" y="172" width="240" height="42" rx="8"/></g>
+<text class="th" x="190" y="198" text-anchor="middle">VLM layer 2  &#8594;  K, V</text>
+<g class="c-purple"><rect x="400" y="172" width="150" height="42" rx="8"/></g>
+<text class="th" x="475" y="198" text-anchor="middle">expert layer 2</text>
+<text class="ts" x="355" y="187" text-anchor="middle">K,V</text>
+<line class="arr" x1="312" y1="193" x2="398" y2="193"/>
+
+<!-- omitted layers -->
+<line class="arr" x1="190" y1="214" x2="190" y2="244"/>
+<line class="arr" x1="475" y1="214" x2="475" y2="244"/>
+<text class="ts" x="355" y="233" text-anchor="middle">&#8942;  layers 3&#8211;15 (same pattern)</text>
+
+<!-- layer 16 -->
+<g class="c-blue"><rect x="70" y="244" width="240" height="42" rx="8"/></g>
+<text class="th" x="190" y="270" text-anchor="middle">VLM layer 16  &#8594;  K, V</text>
+<g class="c-purple"><rect x="400" y="244" width="150" height="42" rx="8"/></g>
+<text class="th" x="475" y="270" text-anchor="middle">expert layer 16</text>
+<text class="ts" x="355" y="259" text-anchor="middle">K,V</text>
+<line class="arr" x1="312" y1="265" x2="398" y2="265"/>
+
+<!-- VLM ends as cache; expert continues to output -->
+<text class="ts" x="190" y="304" text-anchor="middle">&#9312; VLM all layers once &#8594; KV cache</text>
+<line class="arr" x1="475" y1="286" x2="475" y2="314"/>
+
+<g class="c-purple"><rect x="355" y="314" width="240" height="44" rx="8"/></g>
+<text class="th" x="475" y="337" text-anchor="middle">action chunk &#183; 50 &#215; 7-dim</text>
+<text class="ts" x="475" y="353" text-anchor="middle">&#9313; expert reads cache &#183; denoise &#215; N</text>
+
+<!-- legend: wiring vs timing -->
+<text class="th" x="40" y="390">two-tower &#8220;Mixture of Transformers&#8221;</text>
+<text class="ts" x="40" y="410">wiring: expert layer i reads VLM layer i&#8217;s K,V &#8594; depths must match</text>
+<text class="ts" x="40" y="428">timing: &#9312; VLM runs once &#8594; cache, then &#9313; expert reads cache, denoise &#215; N (VLM not re-run)</text>
+</svg>

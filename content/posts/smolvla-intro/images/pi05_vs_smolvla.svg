@@ -1,0 +1,71 @@
+<svg width="100%" viewBox="0 0 680 384" role="img" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif">
+<title>pi0.5 versus SmolVLA architecture comparison</title>
+<desc>Both are two-tower VLM-plus-action-expert flow-matching models. SmolVLA uses a 500M SmolVLM2 backbone with 64 image tokens per camera, freezes the VLM, and injects time via an MLP. pi0.5 uses a 2B PaliGemma backbone with 256 image tokens per camera, trains everything end to end, and injects time via adaRMS.</desc>
+<style>
+  .t  { font-size: 14px; fill: #20303a; }
+  .ts { font-size: 12px; fill: #5a6b75; }
+  .th { font-size: 14px; font-weight: 500; fill: #20303a; }
+  .arr { stroke: #8a98a2; stroke-width: 1.5; fill: none; marker-end: url(#ah); }
+  .leader { stroke: #c2c8cc; stroke-width: 1; stroke-dasharray: 3 3; }
+  .c-blue   rect { fill: #E6F1FB; stroke: #1A6FC4; stroke-width: 1.3; }
+  .c-purple rect { fill: #EFE7F8; stroke: #7C4DCC; stroke-width: 1.3; }
+  .c-gray   rect { fill: #F0F1EE; stroke: #9aa0a6; stroke-width: 1.3; }
+</style>
+<defs>
+  <marker id="ah" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto">
+    <path d="M0,0 L6,3 L0,6" fill="none" stroke="#8a98a2" stroke-width="1.2"/>
+  </marker>
+</defs>
+
+<text class="th" x="185" y="38" text-anchor="middle">SmolVLA  ·  ~450M</text>
+<text class="th" x="495" y="38" text-anchor="middle">pi0.5  ·  ~3B</text>
+<line class="leader" x1="340" y1="30" x2="340" y2="294"/>
+
+<!-- inputs -->
+<g class="c-gray"><rect x="50" y="54" width="270" height="40" rx="8"/></g>
+<text class="th" x="185" y="74" text-anchor="middle">prefix &#183; 177 tokens</text>
+<text class="ts" x="185" y="89" text-anchor="middle">2 cams&#215;64 &#183; lang 48 &#183; state</text>
+<g class="c-gray"><rect x="360" y="54" width="270" height="40" rx="8"/></g>
+<text class="th" x="495" y="74" text-anchor="middle">prefix &#183; ~1000 tokens</text>
+<text class="ts" x="495" y="89" text-anchor="middle">3 cams&#215;256 &#183; lang 200 &#183; state</text>
+
+<line class="arr" x1="185" y1="94" x2="185" y2="110"/>
+<line class="arr" x1="495" y1="94" x2="495" y2="110"/>
+
+<!-- VLM tower -->
+<g class="c-blue"><rect x="50" y="110" width="270" height="48" rx="8"/></g>
+<text class="th" x="185" y="132" text-anchor="middle">VLM &#183; SmolVLM2-500M</text>
+<text class="ts" x="185" y="148" text-anchor="middle">16 layers &#183; GQA (5 KV heads)</text>
+<g class="c-blue"><rect x="360" y="110" width="270" height="48" rx="8"/></g>
+<text class="th" x="495" y="132" text-anchor="middle">VLM &#183; PaliGemma (Gemma-2B)</text>
+<text class="ts" x="495" y="148" text-anchor="middle">18 layers &#183; MQA (1 KV head)</text>
+
+<line class="arr" x1="185" y1="158" x2="185" y2="176"/>
+<text class="ts" x="197" y="171">KV cache</text>
+<line class="arr" x1="495" y1="158" x2="495" y2="176"/>
+<text class="ts" x="507" y="171">KV cache</text>
+
+<!-- action expert -->
+<g class="c-purple"><rect x="50" y="176" width="270" height="48" rx="8"/></g>
+<text class="th" x="185" y="198" text-anchor="middle">action expert (narrow)</text>
+<text class="ts" x="185" y="214" text-anchor="middle">16 layers &#183; time = MLP-in-suffix</text>
+<g class="c-purple"><rect x="360" y="176" width="270" height="48" rx="8"/></g>
+<text class="th" x="495" y="198" text-anchor="middle">action expert &#183; Gemma-300M</text>
+<text class="ts" x="495" y="214" text-anchor="middle">18 layers &#183; time = adaRMS (DiT)</text>
+
+<line class="arr" x1="185" y1="224" x2="185" y2="242"/>
+<text class="ts" x="197" y="237">denoise &#215; N</text>
+<line class="arr" x1="495" y1="224" x2="495" y2="242"/>
+<text class="ts" x="507" y="237">denoise &#215; N</text>
+
+<!-- output -->
+<g class="c-blue"><rect x="50" y="242" width="270" height="36" rx="8"/></g>
+<text class="th" x="185" y="264" text-anchor="middle">action chunk &#183; 50 &#215; 7-dim</text>
+<g class="c-blue"><rect x="360" y="242" width="270" height="36" rx="8"/></g>
+<text class="th" x="495" y="264" text-anchor="middle">action chunk &#183; 50 &#215; 7-dim</text>
+
+<!-- legend -->
+<text class="th" x="40" y="312">same paradigm: two-tower &#183; layer-aligned KV cross-attn &#183; flow-matching &#183; chunk 50</text>
+<text class="ts" x="40" y="332">pi0.5 is bigger &#8594; ~4&#215; slower: 2B vs 500M VLM &#183; 256 vs 64 img-tokens/cam &#183; longer prefix</text>
+<text class="ts" x="40" y="350">pi0.5 trains all end-to-end (SmolVLA freezes VLM) &#183; time via adaRMS not MLP &#183; MQA not GQA</text>
+</svg>

@@ -1,0 +1,87 @@
+<svg width="100%" viewBox="0 0 680 590" role="img" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif">
+<title>SmolVLA model architecture</title>
+<desc>Top-down data flow: two cameras, robot state, and a language instruction are encoded into a 177-token prefix, processed by the SmolVLM2 backbone, then an action expert runs flow-matching denoising to output a 50-step action chunk.</desc>
+<style>
+  .t  { font-size: 14px; fill: #20303a; }
+  .ts { font-size: 12px; fill: #5a6b75; }
+  .th { font-size: 14px; font-weight: 500; fill: #20303a; }
+  .arr { stroke: #8a98a2; stroke-width: 1.5; fill: none; marker-end: url(#ah); }
+  .c-blue   rect { fill: #E6F1FB; stroke: #1A6FC4; stroke-width: 1.3; }
+  .c-gray   rect { fill: #F0F1EE; stroke: #9aa0a6; stroke-width: 1.3; }
+  .c-purple rect { fill: #EFE7F8; stroke: #7C4DCC; stroke-width: 1.3; }
+</style>
+<defs>
+  <marker id="ah" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto">
+    <path d="M0,0 L6,3 L0,6" fill="none" stroke="#8a98a2" stroke-width="1.2"/>
+  </marker>
+</defs>
+
+<!-- Tier 1: inputs -->
+<g class="c-blue"><rect x="40" y="44" width="176" height="46" rx="8"/></g>
+<text class="th" x="128" y="67" text-anchor="middle">2 cameras</text>
+<text class="ts" x="128" y="83" text-anchor="middle">main + wrist (RGB)</text>
+<g class="c-gray"><rect x="252" y="44" width="176" height="46" rx="8"/></g>
+<text class="th" x="340" y="67" text-anchor="middle">robot state</text>
+<text class="ts" x="340" y="83" text-anchor="middle">6-dim proprioception</text>
+<g class="c-blue"><rect x="464" y="44" width="176" height="46" rx="8"/></g>
+<text class="th" x="552" y="67" text-anchor="middle">instruction</text>
+<text class="ts" x="552" y="83" text-anchor="middle">natural language</text>
+
+<line class="arr" x1="128" y1="90" x2="128" y2="116"/>
+<line class="arr" x1="340" y1="90" x2="340" y2="116"/>
+<line class="arr" x1="552" y1="90" x2="552" y2="116"/>
+
+<!-- Tier 2: encoders -->
+<g class="c-blue"><rect x="40" y="118" width="176" height="46" rx="8"/></g>
+<text class="th" x="128" y="141" text-anchor="middle">SigLIP encoder</text>
+<text class="ts" x="128" y="157" text-anchor="middle">&#8594; 64 tokens / cam</text>
+<g class="c-gray"><rect x="252" y="118" width="176" height="46" rx="8"/></g>
+<text class="th" x="340" y="141" text-anchor="middle">state projection</text>
+<text class="ts" x="340" y="157" text-anchor="middle">&#8594; 1 token</text>
+<g class="c-blue"><rect x="464" y="118" width="176" height="46" rx="8"/></g>
+<text class="th" x="552" y="141" text-anchor="middle">token embedding</text>
+<text class="ts" x="552" y="157" text-anchor="middle">&#8594; 48 tokens</text>
+
+<line class="arr" x1="128" y1="164" x2="128" y2="188"/>
+<line class="arr" x1="340" y1="164" x2="340" y2="188"/>
+<line class="arr" x1="552" y1="164" x2="552" y2="188"/>
+
+<!-- Tier 3: prefix sequence -->
+<text class="th" x="40" y="206">prefix token sequence &#8212; 177 tokens</text>
+<g class="c-blue"><rect x="46" y="214" width="196" height="40" rx="6"/></g>
+<text class="ts" x="144" y="238" text-anchor="middle">cam1 &#183; 64</text>
+<g class="c-blue"><rect x="246" y="214" width="196" height="40" rx="6"/></g>
+<text class="ts" x="344" y="238" text-anchor="middle">cam2 &#183; 64</text>
+<g class="c-blue"><rect x="446" y="214" width="130" height="40" rx="6"/></g>
+<text class="ts" x="511" y="238" text-anchor="middle">lang &#183; 48</text>
+<g class="c-gray"><rect x="580" y="214" width="48" height="40" rx="6"/></g>
+<text class="ts" x="604" y="238" text-anchor="middle">st&#183;1</text>
+
+<line class="arr" x1="340" y1="254" x2="340" y2="288"/>
+
+<!-- Tier 4: VLM backbone -->
+<g class="c-purple"><rect x="40" y="288" width="600" height="52" rx="8"/></g>
+<text class="th" x="340" y="311" text-anchor="middle">SmolVLM2 backbone (vision-language model)</text>
+<text class="ts" x="340" y="329" text-anchor="middle">16 transformer layers &#183; self-attention over prefix &#8594; KV cache</text>
+
+<line class="arr" x1="340" y1="340" x2="340" y2="366"/>
+<text class="ts" x="352" y="357">prefix KV cache</text>
+
+<!-- Tier 5: action expert -->
+<g class="c-purple"><rect x="40" y="366" width="600" height="74" rx="8"/></g>
+<text class="th" x="340" y="392" text-anchor="middle">action expert &#183; flow-matching denoising</text>
+<text class="ts" x="340" y="412" text-anchor="middle">start from noise &#8594; 50 action tokens cross-attend to prefix</text>
+<text class="ts" x="340" y="430" text-anchor="middle">repeat &#215; N denoising steps &#8594; predict action</text>
+
+<line class="arr" x1="340" y1="440" x2="340" y2="466"/>
+
+<!-- Tier 6: output -->
+<g class="c-blue"><rect x="40" y="466" width="600" height="50" rx="8"/></g>
+<text class="th" x="340" y="489" text-anchor="middle">action chunk &#8212; 50 steps &#215; 7-dim</text>
+<text class="ts" x="340" y="507" text-anchor="middle">[dx dy dz roll pitch yaw gripper] &#8594; execute via queue &#8594; robot</text>
+
+<!-- interpretability hooks legend -->
+<text class="th" x="40" y="544">where our visualizations tap in</text>
+<text class="ts" x="40" y="562">attention = action&#8594;prefix cross-attention weights (q 50 &#215; kv 177)</text>
+<text class="ts" x="40" y="580">saliency = &#8706;action / &#8706;pixel, gradient backprop from output up to cameras</text>
+</svg>

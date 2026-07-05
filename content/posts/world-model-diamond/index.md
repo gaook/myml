@@ -1,6 +1,6 @@
 ---
-title: "世界模型登场：当 AI 开始「梦」出下一帧"
-date: 2026-07-05
+title: "(3) 世界模型登场：当 AI 开始「梦」出下一帧"
+date: 2026-07-05T12:00:00+08:00
 draft: false
 math: true
 tags: ["世界模型", "DIAMOND", "扩散模型", "VLA", "机器人", "World Model"]

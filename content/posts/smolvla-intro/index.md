@@ -1,6 +1,6 @@
 ---
-title: "从 SmolVLA 入门 VLA：一个能在 MacBook 上跑的视觉-语言-动作模型"
-date: 2026-07-05
+title: "(1) 从 SmolVLA 入门 VLA：一个能在 MacBook 上跑的视觉-语言-动作模型"
+date: 2026-07-05T10:00:00+08:00
 draft: false
 math: true
 tags: ["VLA", "SmolVLA", "机器人", "flow matching", "LeRobot", "世界模型"]

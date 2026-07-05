@@ -13,6 +13,7 @@ theme = "PaperMod"
   ShowToc = true                 # 文章内显示目录
   TocOpen = false
   math = true                    # 开启数学公式总开关
+  comments = true                # 文章底部显示评论区(giscus)，单篇可用 front matter comments=false 关闭
 
   [params.homeInfoParams]
     Title = "新时代码农的倔强 👋"

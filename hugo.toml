@@ -45,3 +45,9 @@ theme = "PaperMod"
     noClasses = false
   [markup.goldmark.renderer]
     unsafe = true                # 允许在 Markdown 里写 HTML
+  # 让 Markdown 不去处理公式内容（否则 _ 会变斜体、\, \! 等被吃掉），原样交给 KaTeX
+  [markup.goldmark.extensions.passthrough]
+    enable = true
+    [markup.goldmark.extensions.passthrough.delimiters]
+      block  = [['$$', '$$'], ['\[', '\]']]
+      inline = [['$', '$'], ['\(', '\)']]

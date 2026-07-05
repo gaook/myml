@@ -1,0 +1,64 @@
+<svg width="100%" viewBox="0 0 680 396" role="img" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif">
+<title>The three components of a planning stack and what we substituted</title>
+<desc>A true model-based planning stack needs three parts: a policy, a world model, and a value model. SmolVLA only provides the policy. In our experiments we substituted the real simulator for the world model and the full-rollout terminal reward for the value model, so the loop only works in simulation.</desc>
+<style>
+  .t  { font-size: 14px; fill: #20303a; }
+  .ts { font-size: 12px; fill: #5a6b75; }
+  .th { font-size: 14px; font-weight: 500; fill: #20303a; }
+  .c-blue rect { fill: #E6F1FB; stroke: #1A6FC4; stroke-width: 1.3; }
+  .c-gray rect { fill: #F0F1EE; stroke: #9aa0a6; stroke-width: 1.3; }
+</style>
+
+<text class="th" x="165" y="58" text-anchor="middle">&#35268;&#21010;&#19977;&#38646;&#20214;</text>
+<text class="th" x="344" y="58" text-anchor="middle">VLA &#26377;?</text>
+<text class="th" x="519" y="58" text-anchor="middle">&#25105;&#20204;&#29992;&#20160;&#20040;&#39030;&#26367;</text>
+
+<!-- Row 1: policy -->
+<g class="c-blue"><rect x="40" y="72" width="250" height="54" rx="8"/></g>
+<text class="th" x="165" y="96" text-anchor="middle">&#9312; &#31574;&#30053; (policy / VLA)</text>
+<text class="ts" x="165" y="113" text-anchor="middle">&#25552;&#35758;&#21160;&#20316; (obs &#8594; action)</text>
+<g class="c-gray"><rect x="300" y="72" width="88" height="54" rx="8"/></g>
+<text class="th" x="344" y="104" text-anchor="middle" fill="#1a7a3a">&#10003; &#26377;</text>
+<g class="c-gray"><rect x="398" y="72" width="242" height="54" rx="8"/></g>
+<text class="th" x="519" y="96" text-anchor="middle">SmolVLA &#26412;&#36523;</text>
+<text class="ts" x="519" y="113" text-anchor="middle">&#26080;&#38656;&#39030;&#26367;</text>
+
+<!-- Row 2: world model -->
+<g class="c-blue"><rect x="40" y="132" width="250" height="54" rx="8"/></g>
+<text class="th" x="165" y="156" text-anchor="middle">&#9313; &#19990;&#30028;&#27169;&#22411; (world model)</text>
+<text class="ts" x="165" y="173" text-anchor="middle">&#24819;&#35937;&#26410;&#26469; (&#21160;&#20316; &#8594; &#19979;&#19968;&#24069;)</text>
+<g class="c-gray"><rect x="300" y="132" width="88" height="54" rx="8"/></g>
+<text class="th" x="344" y="164" text-anchor="middle" fill="#c0392b">&#10007; &#32570;</text>
+<g class="c-gray"><rect x="398" y="132" width="242" height="54" rx="8"/></g>
+<text class="th" x="519" y="156" text-anchor="middle">&#30495;&#20223;&#30495; (&#30495;&#36305;)</text>
+<text class="ts" x="519" y="173" text-anchor="middle">&#20813;&#36153;&#65292;&#20294;&#21482;&#22312; sim &#25104;&#31435;</text>
+
+<!-- Row 3: value model -->
+<g class="c-blue"><rect x="40" y="192" width="250" height="54" rx="8"/></g>
+<text class="th" x="165" y="216" text-anchor="middle">&#9314; &#20215;&#20540;&#27169;&#22411; (value model)</text>
+<text class="ts" x="165" y="233" text-anchor="middle">&#32473;&#29366;&#24577;&#25171;&#20998; V(s)</text>
+<g class="c-gray"><rect x="300" y="192" width="88" height="54" rx="8"/></g>
+<text class="th" x="344" y="224" text-anchor="middle" fill="#c0392b">&#10007; &#32570;</text>
+<g class="c-gray"><rect x="398" y="192" width="242" height="54" rx="8"/></g>
+<text class="th" x="519" y="216" text-anchor="middle">&#36305;&#21040;&#32456;&#28857;&#30340;&#31232;&#30095;&#22870;&#21169;</text>
+<text class="ts" x="519" y="233" text-anchor="middle">&#23436;&#25972; rollout &#24403;&#35780;&#20998;</text>
+
+<!-- planning loop -->
+<text class="th" x="40" y="274">&#30495; MPC &#35268;&#21010;&#24490;&#29615;&#65288;&#19977;&#38646;&#20214;&#40784;&#20102;&#25165;&#25104;&#31435;&#65289;:</text>
+<g class="c-blue"><rect x="46" y="284" width="88" height="32" rx="6"/></g>
+<text class="ts" x="90" y="304" text-anchor="middle">&#25552;&#35758; N</text>
+<g class="c-blue"><rect x="146" y="284" width="88" height="32" rx="6"/></g>
+<text class="ts" x="190" y="304" text-anchor="middle">&#9313;&#24819;&#35937;&#32467;&#26524;</text>
+<g class="c-blue"><rect x="246" y="284" width="88" height="32" rx="6"/></g>
+<text class="ts" x="290" y="304" text-anchor="middle">&#9314;&#25171;&#20998;</text>
+<g class="c-blue"><rect x="346" y="284" width="88" height="32" rx="6"/></g>
+<text class="ts" x="390" y="304" text-anchor="middle">&#36873;&#26368;&#20248;</text>
+<g class="c-blue"><rect x="446" y="284" width="88" height="32" rx="6"/></g>
+<text class="ts" x="490" y="304" text-anchor="middle">&#25191;&#34892;&#31532;&#19968;&#27573;</text>
+<g class="c-blue"><rect x="546" y="284" width="88" height="32" rx="6"/></g>
+<text class="ts" x="590" y="304" text-anchor="middle">&#8634; &#37325;&#26469;</text>
+
+<!-- synthesis -->
+<g class="c-gray"><rect x="40" y="336" width="600" height="40" rx="8"/></g>
+<text class="th" x="340" y="361" text-anchor="middle">SmolVLA &#21482;&#21344;&#9312; ; &#9313;&#29992;&#30495;&#20223;&#30495;&#12289;&#9314;&#29992;&#23436;&#25972;&#36305;&#21040;&#24213;&#39030;&#26367; &#8594; &#29615;&#27809;&#30495;&#38381;&#65292;&#21482;&#22312; sim &#25104;&#31435;</text>
+</svg>

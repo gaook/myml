@@ -1,0 +1,11 @@
+# Hugo 构建产物（Cloudflare 会在云端自己构建，不需要提交）
+/public/
+/resources/
+.hugo_build.lock
+
+# 系统文件
+.DS_Store
+
+# 编辑器
+.idea/
+.vscode/

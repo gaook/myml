@@ -1,0 +1,47 @@
+# 部署到 Cloudflare Pages 后，把这里换成实际域名（如 myml.pages.dev 或你的自定义域名）
+baseURL = "https://myml.pages.dev/"
+languageCode = "zh-cn"
+title = "我的深度学习笔记"
+theme = "PaperMod"
+
+# 让文章列表显示摘要
+[params]
+  defaultTheme = "auto"          # 自动适配深色/浅色
+  ShowReadingTime = true         # 显示阅读时长
+  ShowShareButtons = false
+  ShowCodeCopyButtons = true     # 代码块右上角「复制」按钮
+  ShowToc = true                 # 文章内显示目录
+  TocOpen = false
+  math = true                    # 开启数学公式总开关
+
+  [params.homeInfoParams]
+    Title = "你好 👋"
+    Content = "这里记录我在深度学习路上的学习心得、踩坑笔记和论文复现。"
+
+# 顶部导航菜单
+[[menu.main]]
+  identifier = "posts"
+  name = "文章"
+  url = "/posts/"
+  weight = 10
+[[menu.main]]
+  identifier = "tags"
+  name = "标签"
+  url = "/tags/"
+  weight = 20
+[[menu.main]]
+  identifier = "search"
+  name = "搜索"
+  url = "/search/"
+  weight = 30
+
+# 开启搜索功能需要的输出格式
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+
+# 代码高亮配置
+[markup]
+  [markup.highlight]
+    noClasses = false
+  [markup.goldmark.renderer]
+    unsafe = true                # 允许在 Markdown 里写 HTML
